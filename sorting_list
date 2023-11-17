@@ -1,0 +1,47 @@
+Given the head of a linked list, return the list after sorting it in ascending order.
+class Solution:
+    def sortList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        def merge(a,b):
+            cur = res = ListNode()
+            
+            while a and b:
+                if a.val <= b.val:
+                    cur.next = a 
+                    a = a.next 
+                else:
+                    cur.next = b 
+                    b = b.next 
+                    
+                cur = cur.next
+                
+            while a:
+                cur.next = a 
+                a = a.next 
+                cur = cur.next
+                
+            while b:
+                cur.next = b 
+                b = b.next 
+                cur = cur.next
+                
+            return res.next
+            
+        if not head or not head.next:
+            return head 
+        
+        pre, slow, fast = None, head, head
+        
+        while fast and fast.next:
+            pre, slow, fast = slow, slow.next, fast.next.next
+            
+        if pre:
+            pre.next = None
+            
+        first_half = self.sortList(head)
+        second_half = self.sortList(slow)
+        result = merge(first_half, second_half)
+        
+        return result
+        
+        
+    
